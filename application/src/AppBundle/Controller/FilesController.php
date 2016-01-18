@@ -33,13 +33,29 @@ class FilesController extends FOSRestController
      */
     public function postFilesAction(Request $request)
     {
-        $file = $request->files->get('file');
+        $files = $request->files;
         $filesystem = $this->container->get('local');
-        $stream = fopen($file->getRealPath(), 'r+');
-        $filesystem->writeStream($file->getClientOriginalName(), $stream);
-        fclose($stream);
-        $data = ['error' => 0];
-        $view = $this->view($data, 200);
+        if ($files)
+        {
+            foreach ($files as $file) {
+                if ($filesystem->has($file->getClientOriginalName()))
+                {
+                    $data = ['error' => 490, 'error_message' => 'File already exists: '.$file->getClientOriginalName()];
+                    $view = $this->view($data, 409);
+                    return $this->handleView($view);
+                }
+                $stream = fopen($file->getRealPath(), 'r+');
+                $filesystem->writeStream($file->getClientOriginalName(), $stream);
+                fclose($stream);
+            }
+            $data = ['error' => 0];
+            $view = $this->view($data, 200);
+        }
+        else
+        {
+            $data = ['error' => 400, 'error_message' => 'Bad Request. No files found.'];
+            $view = $this->view($data, 400);
+        }
         return $this->handleView($view);
 
     }
@@ -98,7 +114,7 @@ class FilesController extends FOSRestController
             return $this->handleView($view);
         }
 
-        $file = $request->files->get('file');
+        $file = $request->files[0];
         $stream = fopen($file->getRealPath(), 'r+');
         $filesystem->putStream($filename, $stream);
         fclose($stream);

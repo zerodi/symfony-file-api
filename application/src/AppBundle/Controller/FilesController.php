@@ -48,7 +48,7 @@ class FilesController extends FOSRestController
                 $filesystem->writeStream($file->getClientOriginalName(), $stream);
                 fclose($stream);
             }
-            $data = ['error' => 0];
+            $data = ['error' => 0, 'response' => $filesystem->getMetadata($filename)];
             $view = $this->view($data, 200);
         }
         else
@@ -118,7 +118,7 @@ class FilesController extends FOSRestController
         $stream = fopen($file->getRealPath(), 'r+');
         $filesystem->putStream($filename, $stream);
         fclose($stream);
-        $data = ['error' => 0];
+        $data = ['error' => 0, 'response' => $filesystem->getMetadata($filename)];
         $view = $this->view($data, 200);
         return $this->handleView($view);
     }

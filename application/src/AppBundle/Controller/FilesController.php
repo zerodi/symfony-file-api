@@ -53,7 +53,9 @@ class FilesController extends FOSRestController
         $filesystem = $this->container->get('local');
         if (!$filesystem->has($filename))
         {
-            throw new HttpException(404, "File Not Found");
+            $data = ['error' => 404, 'error_message' => "File Not Found"];
+            $view = $this->view($data, 404);
+            return $this->handleView($view);
         }
         $response = new Response();
         $response->headers->set('Content-Type', $filesystem->getMimetype($filename));
@@ -73,7 +75,9 @@ class FilesController extends FOSRestController
         $filesystem = $this->container->get('local');
         if (!$filesystem->has($filename))
         {
-            throw new HttpException(404, "File Not Found");
+            $data = ['error' => 404, 'error_message' => "File Not Found"];
+            $view = $this->view($data, 404);
+            return $this->handleView($view);
         }
         $data = ['error' => 0, 'response' => $filesystem->getMetadata($filename)];
         $view = $this->view($data, 200);
@@ -89,7 +93,9 @@ class FilesController extends FOSRestController
         $filesystem = $this->container->get('local');
         if (!$filesystem->has($filename))
         {
-            throw new HttpException(404, "File Not Found");
+            $data = ['error' => 404, 'error_message' => "File Not Found"];
+            $view = $this->view($data, 404);
+            return $this->handleView($view);
         }
 
         $file = $request->files->get('file');

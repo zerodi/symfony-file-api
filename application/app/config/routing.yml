@@ -1,0 +1,7 @@
+app:
+    resource: "@AppBundle/Controller/DefaultController.php"
+    type:     annotation
+
+api:
+    resource: "@AppBundle/Controller/FilesController.php"
+    type: annotation

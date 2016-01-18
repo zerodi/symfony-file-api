@@ -8,8 +8,8 @@ Use:
 
 #### TODO
 
-- Write Tests for current code&
+- Write Tests for current code
 - Write Error class for normal work with error messages.
 - Realize Authentication and user file management
-- Realize normal Vagrant+Ansible development evrironment
+- Realize normal Vagrant+Ansible development environment
 - Refactor routing to normal usage FOSRest routing system
